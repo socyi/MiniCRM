@@ -17,8 +17,9 @@ class TransactionSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        // Generate 10 transactions, for dates within the last year, with amounts between 10 and 1000
-        for ($i = 0; $i < 10; $i++) {
+        // Generate 30 transactions, for dates within the last year, with amounts between 10 and 1000,
+        // based on existing clients
+        for ($i = 0; $i < 30; $i++) {
             Transaction::create([
                 'client_id' => rand(1, 5),
                 'transaction_date' => $faker->dateTimeBetween('-1 year', 'now'),

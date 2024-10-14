@@ -29,7 +29,7 @@ class ClientController extends Controller
     // Create page for clients
     public function create()
     {
-        return Inertia::render('Client/ClientCreate'); // Adjust to your view
+        return Inertia::render('Client/ClientCreate');
     }
 
     /**
@@ -76,7 +76,7 @@ class ClientController extends Controller
      * Update the specified resource in storage.
      */
     // Update the client
-    public function update(UpdateClientRequest $request, Client $client) // Make sure to create UpdateClientRequest
+    public function update(UpdateClientRequest $request, Client $client)
     {
         $client->update($request->validated());
         return redirect()->route('clients.index')->with('success', 'Client updated successfully.');

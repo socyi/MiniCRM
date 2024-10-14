@@ -32,7 +32,7 @@ class TransactionController extends Controller
     //create page for transactions
     public function create()
     {
-        $clients = Client::all(); // Get all clients to populate the dropdown
+        $clients = Client::all();
         return Inertia::render('Transaction/TransactionCreate', ['clients' => $clients]);
     }
 
@@ -67,7 +67,7 @@ class TransactionController extends Controller
     //edit page for one transaction
     public function edit(Transaction $transaction)
     {
-        $clients = Client::all(); // Get all clients to populate the dropdown
+        $clients = Client::all();
         return Inertia::render('Transaction/TransactionEdit', [
             'transaction' => $transaction,
             'clients' => $clients

@@ -18,8 +18,8 @@ class ClientSeeder extends Seeder
         $faker = Faker::create();
 
 
-        //Generate 15 clients with an image related to people
-        for ($i = 0; $i < 5; $i++) {
+        //Generate 15 clients with an avatar image
+        for ($i = 0; $i < 15; $i++) {
             $imagePath = $this->generateAvatar($faker);
 
             Client::create([

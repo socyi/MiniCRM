@@ -39,20 +39,7 @@ export default {
     },
     methods: {
         updateClient() {
-            const formData = new FormData();
-            formData.append('first_name', this.client.first_name);
-            formData.append('last_name', this.client.last_name);
-            formData.append('email', this.client.email);
-
-            if (this.client.avatarFile) {
-                formData.append('avatar', this.client.avatarFile);
-            }
-
-            this.$inertia.put(`/clients/${this.client.id}`, formData);
-        },
-        onFileChange(event) {
-            const file = event.target.files[0];
-            this.client.avatarFile = file;
+            this.$inertia.put(`/clients/${this.client.id}`, this.client);
         },
     },
 };
