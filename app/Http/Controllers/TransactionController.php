@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class TransactionController extends Controller
 {
@@ -12,7 +14,11 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        //
+        $transactions = Transaction::with('client')->paginate(10);
+
+        return Inertia::render('Transaction/TransactionsIndex', [
+            'transactions' => $transactions,
+        ]);
     }
 
     /**
@@ -20,7 +26,8 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        //
+        $clients = Client::all(); // Get all clients to populate the dropdown
+        return Inertia::render('Transaction/TransactionCreate', ['clients' => $clients]);
     }
 
     /**
@@ -28,7 +35,15 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'client_id' => 'required|exists:clients,id',
+            'transaction_date' => 'required|date',
+            'amount' => 'required|numeric',
+        ]);
+
+        Transaction::create($request->all());
+
+        return redirect()->route('transactions.index')->with('success', 'Transaction created successfully.');
     }
 
     /**
@@ -36,7 +51,12 @@ class TransactionController extends Controller
      */
     public function show(Transaction $transaction)
     {
-        //
+
+        $transaction->load('client');
+
+        return Inertia::render('Transaction/TransactionView', [
+            'transaction' => $transaction,
+        ]);
     }
 
     /**
@@ -44,7 +64,11 @@ class TransactionController extends Controller
      */
     public function edit(Transaction $transaction)
     {
-        //
+        $clients = Client::all(); // Get all clients to populate the dropdown
+        return Inertia::render('Transaction/TransactionEdit', [
+            'transaction' => $transaction,
+            'clients' => $clients
+        ]);
     }
 
     /**
@@ -52,7 +76,15 @@ class TransactionController extends Controller
      */
     public function update(Request $request, Transaction $transaction)
     {
-        //
+        $request->validate([
+            'amount' => 'required|numeric',
+            'transaction_date' => 'required|date',
+            // Add other fields as necessary
+        ]);
+
+        $transaction->update($request->all());
+
+        return redirect()->route('transactions.index')->with('success', 'Transaction updated successfully.');
     }
 
     /**
@@ -60,6 +92,8 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction)
     {
-        //
+        $transaction->delete();
+
+        return redirect()->route('transactions.index')->with('success', 'Transaction deleted successfully.');
     }
 }

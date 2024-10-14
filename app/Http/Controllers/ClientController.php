@@ -4,14 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+    //index page for clients, paginated by 10
     public function index()
     {
+        $clients = Client::paginate(10);
+
+        return Inertia::render('Client/ClientsIndex', [
+            'clients' => $clients,
+        ]);
     }
 
     /**
