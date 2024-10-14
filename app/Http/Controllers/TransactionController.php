@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTransactionRequest;
+use App\Http\Requests\UpdateTransactionRequest;
 use App\Models\Client;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -12,6 +14,8 @@ class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    //index page for transactions with clients, paginated by 10
     public function index()
     {
         $transactions = Transaction::with('client')->paginate(10);
@@ -24,6 +28,8 @@ class TransactionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+
+    //create page for transactions
     public function create()
     {
         $clients = Client::all(); // Get all clients to populate the dropdown
@@ -33,27 +39,22 @@ class TransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+
+    //store the transaction
+    public function store(StoreTransactionRequest $request)
     {
-        $request->validate([
-            'client_id' => 'required|exists:clients,id',
-            'transaction_date' => 'required|date',
-            'amount' => 'required|numeric',
-        ]);
-
-        Transaction::create($request->all());
-
+        Transaction::create($request->validated());
         return redirect()->route('transactions.index')->with('success', 'Transaction created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
+
+    //page that shows one transaction
     public function show(Transaction $transaction)
     {
-
         $transaction->load('client');
-
         return Inertia::render('Transaction/TransactionView', [
             'transaction' => $transaction,
         ]);
@@ -62,6 +63,8 @@ class TransactionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+
+    //edit page for one transaction
     public function edit(Transaction $transaction)
     {
         $clients = Client::all(); // Get all clients to populate the dropdown
@@ -74,26 +77,22 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Transaction $transaction)
+
+    //update the transaction
+    public function update(UpdateTransactionRequest $request, Transaction $transaction)
     {
-        $request->validate([
-            'amount' => 'required|numeric',
-            'transaction_date' => 'required|date',
-            // Add other fields as necessary
-        ]);
-
-        $transaction->update($request->all());
-
+        $transaction->update($request->validated());
         return redirect()->route('transactions.index')->with('success', 'Transaction updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
+
+    //delete the transaction
     public function destroy(Transaction $transaction)
     {
         $transaction->delete();
-
         return redirect()->route('transactions.index')->with('success', 'Transaction deleted successfully.');
     }
 }

@@ -17,6 +17,7 @@
                     <th>Last Name</th>
                     <th>Email</th>
                     <th>Avatar</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -28,43 +29,49 @@
                     <td>
                         <img v-if="client.avatar" :src="`/storage/${client.avatar}`" alt="Avatar" class="avatar" />
                     </td>
+                    <td>
+                        <button class="btn btn-info btn-sm" @click="viewClient(client.id)">View</button>
+                        <button class="btn btn-warning btn-sm" @click="editClient(client.id)">Edit</button>
+                        <button class="btn btn-danger btn-sm" @click="deleteClient(client.id)">Delete</button>
+                    </td>
                 </tr>
                 </tbody>
             </table>
 
+            <button class="btn btn-primary float-right" @click="createClient">Create Client</button>
+
             <nav>
                 <ul class="pagination">
                     <li class="page-item" :class="{ disabled: !clients.links[0].url }">
-                        <a class="page-link" :href="clients.links[0].url"
-                           @click.prevent="goToPage(clients.links[0].url)">
+                        <a class="page-link" :href="clients.links[0].url" @click.prevent="goToPage(clients.links[0].url)">
                             &laquo;
                         </a>
                     </li>
-                    <li v-for="(link, index) in clients.links.slice(1, -1)" :key="index" class="page-item"
-                        :class="{ active: link.active }">
+                    <li v-for="(link, index) in clients.links.slice(1, -1)" :key="index" class="page-item" :class="{ active: link.active }">
                         <a class="page-link" :href="link.url" @click.prevent="goToPage(link.url)">
                             {{ link.label }}
                         </a>
                     </li>
                     <li class="page-item" :class="{ disabled: !clients.links[clients.links.length - 1].url }">
-                        <a class="page-link" :href="clients.links[clients.links.length - 1].url"
-                           @click.prevent="goToPage(clients.links[clients.links.length - 1].url)">
+                        <a class="page-link" :href="clients.links[clients.links.length - 1].url" @click.prevent="goToPage(clients.links[clients.links.length - 1].url)">
                             &raquo;
                         </a>
                     </li>
                 </ul>
             </nav>
         </div>
+
+        <br>
     </AuthenticatedLayout>
 </template>
 
 <script>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head} from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 
 export default {
     props: {
-        clients: Object, // Accept pagination data as an object
+        clients: Object,
     },
     components: {
         AuthenticatedLayout,
@@ -72,7 +79,21 @@ export default {
     },
     methods: {
         goToPage(url) {
-            this.$inertia.get(url); // Use Inertia to navigate to the new page
+            this.$inertia.get(url);
+        },
+        viewClient(id) {
+            this.$inertia.get(`/clients/${id}`);
+        },
+        editClient(id) {
+            this.$inertia.get(`/clients/${id}/edit`);
+        },
+        deleteClient(id) {
+            if (confirm('Are you sure you want to delete this client?')) {
+                this.$inertia.delete(`/clients/${id}`);
+            }
+        },
+        createClient() {
+            this.$inertia.get('/clients/create');
         },
     },
 };

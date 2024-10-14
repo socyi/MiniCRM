@@ -4,7 +4,7 @@
         <div class="container mt-4">
             <h2>Create Transaction</h2>
             <form @submit.prevent="createTransaction">
-                <div class="form-group">
+                <div class="form-group mt-5">
                     <label for="client_id">Client</label>
                     <select v-model="form.client_id" class="form-control" id="client_id" required>
                         <option v-for="client in clients" :key="client.id" :value="client.id">
@@ -20,8 +20,10 @@
                     <label for="amount">Amount</label>
                     <input type="number" v-model="form.amount" class="form-control" id="amount" required />
                 </div>
-                <button type="submit" class="btn btn-primary">Create Transaction</button>
-                <button type="button" class="btn btn-secondary" @click="$inertia.visit('/transactions')">Cancel</button>
+                <div class="mt-5">
+                    <button type="submit" class="btn btn-primary mr-3">Create Transaction</button>
+                    <button type="button" class="btn btn-secondary" @click="$inertia.visit('/transactions')">Cancel</button>
+                </div>
             </form>
         </div>
     </AuthenticatedLayout>
@@ -37,20 +39,20 @@ export default {
         Head,
     },
     props: {
-        clients: Array, // List of clients passed as a prop
+        clients: Array,
     },
     data() {
         return {
             form: {
-                client_id: '',            // To hold the selected client ID
-                transaction_date: '',     // To hold the transaction date
-                amount: '',               // To hold the transaction amount
+                client_id: '',
+                transaction_date: '',
+                amount: '',
             },
         };
     },
     methods: {
         createTransaction() {
-            this.$inertia.post('/transactions', this.form); // Send a POST request to create the transaction
+            this.$inertia.post('/transactions', this.form);
         },
     },
 };

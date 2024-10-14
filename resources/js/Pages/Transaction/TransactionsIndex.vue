@@ -14,7 +14,7 @@
                     <th>Client</th>
                     <th>Transaction Date</th>
                     <th>Amount</th>
-                    <th>Actions</th> <!-- New Actions Column -->
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -85,18 +85,18 @@ export default {
             }).format(amount);
         },
         viewTransaction(id) {
-            this.$inertia.get(`/transactions/${id}`); // Replace with your route to view the transaction
+            this.$inertia.get(`/transactions/${id}`);
         },
         editTransaction(id) {
-            this.$inertia.get(`/transactions/${id}/edit`); // Replace with your route to edit the transaction
+            this.$inertia.get(`/transactions/${id}/edit`);
         },
         deleteTransaction(id) {
             if (confirm('Are you sure you want to delete this transaction?')) {
-                this.$inertia.delete(`/transactions/${id}`); // Replace with your route to delete the transaction
+                this.$inertia.delete(`/transactions/${id}`);
             }
         },
         createTransaction() {
-            this.$inertia.get('/transactions/create'); // Replace with your route to create a new transaction
+            this.$inertia.get('/transactions/create');
         },
     },
 };
